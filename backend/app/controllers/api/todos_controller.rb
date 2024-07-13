@@ -1,3 +1,5 @@
+module Api
+
 class TodosController < ApplicationController
     def index
       @todos = Todo.all
@@ -39,3 +41,4 @@ class TodosController < ApplicationController
       params.require(:todo).permit(:title, :completed)
     end
   end
+end

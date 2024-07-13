@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   # TODO App
-  resources :todos
+  namespace :api do
+    resources :todos
+  end
 
 end
