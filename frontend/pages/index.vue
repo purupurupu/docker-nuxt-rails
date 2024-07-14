@@ -1,6 +1,4 @@
 <script setup>
-import { ref, onMounted } from "vue";
-
 const todos = ref([]);
 const newTodo = ref("");
 
@@ -56,10 +54,8 @@ onMounted(fetchTodos);
             <div class="flex space-x-2">
                 <input v-model="newTodo" @keyup.enter="addTodo" type="text" placeholder="Add a new task"
                     class="flex-grow px-3 py-2 border rounded-md bg-background text-foreground" />
-                <button @click="addTodo"
-                    class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90">
-                    Add
-                </button>
+                <Button @click="addTodo" variant="default">Add</Button>
+
             </div>
             <ul class="space-y-2">
                 <li v-for="todo in todos" :key="todo.id"
