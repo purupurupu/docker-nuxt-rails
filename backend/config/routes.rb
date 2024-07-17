@@ -10,8 +10,11 @@ Rails.application.routes.draw do
 
   # TODO App
   namespace :api do
-    resources :todos
-    patch 'todos/update_order', to: 'todos#update_order'
+    resources :todos do
+      collection do
+        patch 'update_order'
+      end
+    end
   end
 
 end

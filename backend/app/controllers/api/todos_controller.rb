@@ -36,8 +36,11 @@ class TodosController < ApplicationController
     end
 
     def update_order
-      params[:todos].each do |todo|
-        Todo.find(todo:[:id]).update(position: todo[:position])
+      params[:todos].each do |todo_data|
+        todo = Todo.find(todo_data[:id])
+        todo.update(position: todo_data[:position])
+      end
+      head :ok
     end
 
     private
@@ -46,5 +49,4 @@ class TodosController < ApplicationController
       params.require(:todo).permit(:title, :completed, :position)
     end
   end
-end
 end

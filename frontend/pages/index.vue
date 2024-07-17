@@ -46,12 +46,26 @@ const deleteTodo = async (todo) => {
   todos.value = todos.value.filter((t) => t.id !== todo.id);
 };
 
-const onDragEnd = () => {
+const updateOrder = async () => {
+  const updatedTodos = todos.value.map((todo, index) => ({
+    id: todo.id,
+    position: index + 1,
+  }));
+
+  await fetch("http://localhost:3001/api/todos/update_order", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      todos: updatedTodos,
+    }),
+  });
+};
+
+const onDragEnd = async () => {
   // TODO: Implement reordering of todos
-  console.log(
-    "New order:",
-    todos.value.map((todo) => todo.id)
-  );
+  await updateOrder(todos.value);
 };
 
 onMounted(fetchTodos);
