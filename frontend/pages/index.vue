@@ -1,4 +1,6 @@
 <script setup>
+import draggable from 'vuedraggable'
+
 const todos = ref([]);
 const newTodo = ref("");
 
@@ -44,6 +46,12 @@ const deleteTodo = async (todo) => {
     todos.value = todos.value.filter((t) => t.id !== todo.id);
 };
 
+const onDragEnd = () => {
+    // TODO: Implement reordering of todos
+    console.log('New order:', todos.value.map(todo => todo.id));
+};
+
+
 onMounted(fetchTodos);
 </script>
 
@@ -62,20 +70,30 @@ onMounted(fetchTodos);
                     </div>
                     <Button type="submit" class="w-full">Add Task</Button>
                 </form>
-                <div v-if="todos.length > 0" class="mt-6 space-y-2">
-                    <div v-for="todo in todos" :key="todo.id" class="flex items-center space-x-2">
-                        <Checkbox :id="'todo-' + todo.id" :checked="todo.completed"
-                            @update:checked="(checked) => toggleTodo(todo, checked)" />
-                        <Label :for="'todo-' + todo.id" :class="{ 'line-through': todo.completed }">
-                            {{ todo.title }}
-                        </Label>
-                        <Button variant="destructive" size="sm" @click="deleteTodo(todo)" class="ml-auto">
-                            Delete
-                        </Button>
-                    </div>
-                </div>
-                <p v-else class="text-center text-muted-foreground mt-6">No tasks yet. Add some!</p>
+                <draggable v-model="todos" item-key="id" @end="onDragEnd" :animation="200" ghost-class="ghost-class"
+                    class="mt-6 space-y-2">
+                    <template #item="{ element: todo }">
+                        <div class="flex items-center space-x-2 p-2 bg-secondary rounded-md cursor-move">
+                            <Checkbox :id="'todo-' + todo.id" :checked="todo.completed"
+                                @update:checked="() => toggleTodo(todo)" />
+                            <Label :for="'todo-' + todo.id" :class="{ 'line-through': todo.completed }">
+                                {{ todo.title }}
+                            </Label>
+                            <Button variant="destructive" size="sm" @click="deleteTodo(todo)" class="ml-auto">
+                                Delete
+                            </Button>
+                        </div>
+                    </template>
+                </draggable>
+                <p v-if="todos.length === 0" class="text-center text-muted-foreground mt-6">No tasks yet. Add some!</p>
             </CardContent>
         </Card>
     </div>
 </template>
+
+<style scoped>
+.ghost-class {
+    opacity: 0.5;
+    background: #c8ebfb;
+}
+</style>

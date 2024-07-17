@@ -19,7 +19,8 @@
     "radix-vue": "^1.9.1",
     "shadcn-nuxt": "^0.10.4",
     "tailwind-merge": "^2.4.0",
-    "vue": "latest"
+    "vue": "latest",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@heroicons/vue": "^2.1.5",
