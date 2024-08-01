@@ -72,7 +72,7 @@ onMounted(fetchTodos);
 </script>
 
 <template>
-  <div class="container mx-auto py-8">
+  <div class="container py-8 mx-auto">
     <Card class="w-full max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Stylish TODO List</CardTitle>
@@ -100,25 +100,22 @@ onMounted(fetchTodos);
         >
           <template #item="{ element: todo }">
             <div
-              class="flex items-center space-x-2 p-2 bg-secondary rounded-md cursor-move"
+              class="flex items-center justify-between p-2 space-x-2 rounded-md cursor-move bg-secondary"
             >
-              <Checkbox
-                :id="'todo-' + todo.id"
-                :checked="todo.completed"
-                @update:checked="() => toggleTodo(todo)"
-              />
-              <Label
-                :for="'todo-' + todo.id"
-                :class="{ 'line-through': todo.completed }"
-              >
-                {{ todo.title }}
-              </Label>
-              <Button
-                variant="destructive"
-                size="sm"
-                @click="deleteTodo(todo)"
-                class="ml-auto"
-              >
+              <div class="flex items-center space-x-2">
+                <Checkbox
+                  :id="'todo-' + todo.id"
+                  :checked="todo.completed"
+                  @update:checked="() => toggleTodo(todo)"
+                />
+                <Label
+                  :for="'todo-' + todo.id"
+                  :class="{ 'line-through': todo.completed }"
+                >
+                  {{ todo.title }}
+                </Label>
+              </div>
+              <Button variant="destructive" size="sm" @click="deleteTodo(todo)">
                 Delete
               </Button>
             </div>
@@ -126,7 +123,7 @@ onMounted(fetchTodos);
         </draggable>
         <p
           v-if="todos.length === 0"
-          class="text-center text-muted-foreground mt-6"
+          class="mt-6 text-center text-muted-foreground"
         >
           No tasks yet. Add some!
         </p>
