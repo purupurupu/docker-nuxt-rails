@@ -1,15 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import draggable from "vuedraggable";
 import { Trash2, Edit } from "lucide-vue-next";
 
-const todos = ref([]);
+const todos = ref<Todo[]>([]);
 const newTodo = ref("");
 
-const editingTodo = ref(null);
+const editingTodo = ref<Todo | null>(null);
 const editedTitle = ref("");
 const isEditModalOpen = ref(false);
 
-const openEditModal = (todo) => {
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+const openEditModal = (todo: Todo): void => {
   editingTodo.value = todo;
   editedTitle.value = todo.title;
   isEditModalOpen.value = true;
@@ -37,7 +43,7 @@ const addTodo = async () => {
   }
 };
 
-const toggleTodo = async (todo) => {
+const toggleTodo = async (todo: Todo) => {
   const response = await fetch(`http://localhost:3001/api/todos/${todo.id}`, {
     method: "PATCH",
     headers: {
@@ -69,7 +75,7 @@ const updateTodo = async () => {
   }
 };
 
-const deleteTodo = async (todo) => {
+const deleteTodo = async (todo: Todo) => {
   await fetch(`http://localhost:3001/api/todos/${todo.id}`, {
     method: "DELETE",
   });
@@ -100,7 +106,7 @@ const updateOrder = async () => {
 
 const onDragEnd = async () => {
   // TODO: Implement reordering of todos
-  await updateOrder(todos.value);
+  await updateOrder();
 };
 
 onMounted(fetchTodos);
