@@ -2,5 +2,6 @@ export interface Todo {
   id: number;
   title: string;
   completed: boolean;
-  position?: number;
+  due_date: string | null;
+  order: number;
 }

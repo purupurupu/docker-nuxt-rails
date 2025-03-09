@@ -7,14 +7,14 @@ export const fetchTodos = async (): Promise<Todo[]> => {
   return await response.json();
 };
 
-export const addTodo = async (title: string): Promise<Todo> => {
+export const addTodo = async (title: string, due_date: string): Promise<Todo> => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      todo: { title, completed: false },
+      todo: { title, completed: false, due_date }
     }),
   });
   return await response.json();
@@ -31,13 +31,13 @@ export const toggleTodo = async (todo: Todo): Promise<Todo> => {
   return await response.json();
 };
 
-export const updateTodo = async (id: number, title: string): Promise<Todo> => {
+export const updateTodo = async (id: number, title: string, due_date: string): Promise<Todo> => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ todo: { title } }),
+    body: JSON.stringify({ todo: { title, due_date } }),
   });
   return await response.json();
 };

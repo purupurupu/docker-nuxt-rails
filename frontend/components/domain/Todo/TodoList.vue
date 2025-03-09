@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'toggle-todo', todo: Todo): void
-  (e: 'update-todo', id: number, title: string): void
+  (e: 'update-todo', id: number, title: string, due_date: string): void
   (e: 'delete-todo', id: number): void
   (e: 'update-order'): void
 }>();
@@ -27,6 +27,12 @@ const openEditModal = (todo: Todo) => {
 const closeEditModal = () => {
   isEditModalOpen.value = false;
   editingTodo.value = null;
+};
+
+const formatDate = (dateString: string | null): string => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('ja-JP');
 };
 
 const onDragEnd = () => {
@@ -45,31 +51,27 @@ const onDragEnd = () => {
   >
     <template #item="{ element: todo }">
       <div
-        class="flex items-center justify-between p-2 space-x-2 rounded-md cursor-move bg-secondary"
+        class="p-4 border rounded-lg flex items-center justify-between group"
+        :class="{ 'bg-gray-100 line-through': todo.completed }"
       >
-        <div class="flex items-center flex-grow space-x-2">
-          <Checkbox
-            :id="'todo-' + todo.id"
-            :checked="todo.completed"
-            @update:checked="() => emit('toggle-todo', todo)"
-          />
-          <Label
-            :for="'todo-' + todo.id"
-            :class="{ 'line-through': todo.completed }"
-          >
-            {{ todo.title }}
-          </Label>
+        <div>
+          <div class="flex items-center space-x-2">
+            <Checkbox
+              :checked="todo.completed"
+              @update:checked="emit('toggle-todo', todo)"
+            />
+            <span>{{ todo.title }}</span>
+          </div>
+          <div v-if="todo.due_date" class="text-sm text-gray-500 ml-6 mt-1">
+            期限: {{ formatDate(todo.due_date) }}
+          </div>
         </div>
-        <div class="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            @click="openEditModal(todo)"
-          >
-            <Edit class="w-4 h-4" />
+        <div class="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button variant="ghost" size="icon" @click="openEditModal(todo)">
+            <Edit class="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon" @click="emit('delete-todo', todo.id)">
-            <Trash2 class="w-4 h-4" />
+            <Trash2 class="h-4 w-4" />
           </Button>
         </div>
       </div>
@@ -79,14 +81,14 @@ const onDragEnd = () => {
     v-if="todos.length === 0"
     class="mt-6 text-center text-muted-foreground"
   >
-    No tasks yet. Add some!
+    タスクがありません。新しいタスクを追加してください。
   </p>
   <TodoEditModal
     v-if="editingTodo"
     :todo="editingTodo"
     :is-open="isEditModalOpen"
     @close="closeEditModal"
-    @update="(title) => emit('update-todo', editingTodo!.id, title)"
+    @update="(id, title, due_date) => emit('update-todo', id, title, due_date)"
   />
 </template>
 
