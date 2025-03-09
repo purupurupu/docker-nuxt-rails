@@ -2,15 +2,17 @@
 import { ref } from 'vue';
 
 const newTodo = ref('');
+const dueDate = ref('');
 
 const emit = defineEmits<{
-  (e: 'add-todo', title: string): void
+  (e: 'add-todo', title: string, due_date: string): void
 }>();
 
 const addTodo = () => {
   if (newTodo.value.trim()) {
-    emit('add-todo', newTodo.value);
+    emit('add-todo', newTodo.value, dueDate.value);
     newTodo.value = '';
+    dueDate.value = '';
   }
 };
 </script>
@@ -23,6 +25,14 @@ const addTodo = () => {
         id="new-todo"
         v-model="newTodo"
         placeholder="Enter a new task"
+      />
+    </div>
+    <div class="space-y-2">
+      <Label for="due_date">Due Date</Label>
+      <Input
+        id="due_date"
+        v-model="dueDate"
+        type="date"
       />
     </div>
     <Button type="submit" class="w-full">Add Task</Button>

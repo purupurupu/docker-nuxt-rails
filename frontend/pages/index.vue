@@ -11,8 +11,8 @@ onMounted(async () => {
   todos.value = await fetchTodos();
 });
 
-const handleAddTodo = async (title: string) => {
-  const newTodo = await addTodo(title);
+const handleAddTodo = async (title: string, due_date: string) => {
+  const newTodo = await addTodo(title, due_date);
   todos.value.push(newTodo);
 };
 
@@ -22,8 +22,8 @@ const handleToggleTodo = async (todo: Todo) => {
   todos.value[index] = updatedTodo;
 };
 
-const handleUpdateTodo = async (id: number, title: string) => {
-  const updatedTodo = await updateTodo(id, title);
+const handleUpdateTodo = async (id: number, title: string, due_date: string) => {
+  const updatedTodo = await updateTodo(id, title, due_date);
   const index = todos.value.findIndex((t) => t.id === updatedTodo.id);
   todos.value[index] = updatedTodo;
 };
